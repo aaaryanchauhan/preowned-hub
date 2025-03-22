@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,7 +16,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 215 91% 58%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -30,24 +33,17 @@
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 215 91% 58%;
 
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -79,6 +75,7 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+    
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -96,6 +93,108 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-medium tracking-tight;
+  }
+  
+  /* Smooth transitions */
+  a, button, input, textarea, select {
+    @apply transition-all duration-200;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+  
+  /* Image fade-in animation */
+  img {
+    @apply animate-fade-in;
+  }
+}
+
+/* Component-specific styles */
+@layer components {
+  .car-card {
+    @apply rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 bg-white;
+  }
+  
+  .car-image-container {
+    @apply relative overflow-hidden aspect-video;
+  }
+  
+  .car-image {
+    @apply w-full h-full object-cover transition-transform duration-500 hover:scale-105;
+  }
+  
+  .detail-tab {
+    @apply py-4 px-2 border-b-2 border-transparent hover:border-primary font-medium text-gray-600 hover:text-gray-900 transition-all;
+  }
+  
+  .detail-tab.active {
+    @apply border-primary text-primary;
+  }
+  
+  .spec-item {
+    @apply flex items-center gap-2 text-gray-600;
+  }
+  
+  .form-group {
+    @apply mb-4;
+  }
+  
+  .dashboard-card {
+    @apply bg-white rounded-xl shadow-sm p-6 transition-all hover:shadow-md;
+  }
+  
+  .dashboard-value {
+    @apply text-5xl font-bold mt-4;
+  }
+  
+  .dashboard-label {
+    @apply text-gray-500 text-lg;
+  }
+  
+  .tab-button {
+    @apply px-4 py-2 rounded-md font-medium;
+  }
+  
+  .tab-button.active {
+    @apply bg-primary text-white;
+  }
+  
+  .data-table {
+    @apply w-full border-collapse;
+  }
+  
+  .data-table th {
+    @apply px-4 py-3 text-left font-medium text-gray-600 bg-gray-50;
+  }
+  
+  .data-table td {
+    @apply px-4 py-3 border-t border-gray-100;
+  }
+  
+  .data-table tr:hover {
+    @apply bg-gray-50;
+  }
+  
+  .empty-state {
+    @apply py-16 text-center text-gray-500;
   }
 }
