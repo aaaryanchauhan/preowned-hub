@@ -66,7 +66,7 @@ const sampleCars: Car[] = [
     acceleration: '5.6 seconds',
     topSpeed: '210 km/h',
     warranty: '1 Year',
-    description: 'This Audi A4 is in pristine condition with low mileage. It features Audi's renowned Quattro all-wheel drive system for exceptional handling in all conditions. The vehicle has been thoroughly inspected and comes with our premium warranty package.',
+    description: 'This Audi A4 is in pristine condition with low mileage. It features Audi\'s renowned Quattro all-wheel drive system for exceptional handling in all conditions. The vehicle has been thoroughly inspected and comes with our premium warranty package.',
     features: ['Panoramic Sunroof', 'Lane Departure Warning', 'Apple CarPlay & Android Auto', 'Leather Seats', 'Power Windows', 'Heated Seats', 'Blind Spot Detection', 'Navigation System', 'Parking Sensors', 'Premium Sound System'],
     images: ['/lovable-uploads/53c68334-47d0-4eca-8459-4b1289042e3a.png', '/placeholder.svg', '/placeholder.svg'],
     status: 'featured'
