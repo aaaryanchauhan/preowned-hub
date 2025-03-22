@@ -2,76 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Car, CarFormData, DashboardStats } from '@/types';
 import { toast } from 'sonner';
-
-// Sample car data
-const sampleCars: Car[] = [
-  {
-    id: '1',
-    make: 'BMW',
-    model: 'X5',
-    year: 2022,
-    price: 5800000,
-    mileage: 15000,
-    fuelType: 'Petrol',
-    transmission: 'Automatic',
-    exteriorColor: 'Mineral White',
-    interiorColor: 'Black Leather',
-    previousOwners: 1,
-    engineSize: '3.0L',
-    power: '340 hp',
-    acceleration: '5.5 seconds',
-    topSpeed: '250 km/h',
-    warranty: '1 Year',
-    description: 'This BMW X5 is in immaculate condition and has been meticulously maintained by its previous owner. It comes with a comprehensive service history and has passed our rigorous 150-point inspection. The Mineral White exterior paired with the Black Leather interior gives this luxury SUV a timeless appeal.',
-    features: ['Panoramic Sunroof', 'Lane Departure Warning', 'Apple CarPlay & Android Auto', 'Leather Seats', 'Power Windows', 'Heated Seats', 'Blind Spot Detection', 'Navigation System', 'Parking Sensors', 'Power Tailgate'],
-    images: ['/lovable-uploads/b9056c67-e943-44a9-99e1-791bac357bf6.png', '/placeholder.svg', '/placeholder.svg', '/placeholder.svg'],
-    status: 'featured'
-  },
-  {
-    id: '2',
-    make: 'Mercedes-Benz',
-    model: 'C-Class',
-    year: 2021,
-    price: 4800000,
-    mileage: 20000,
-    fuelType: 'Hybrid',
-    transmission: 'Automatic',
-    exteriorColor: 'Selenite Grey',
-    interiorColor: 'Beige Leather',
-    previousOwners: 1,
-    engineSize: '2.0L',
-    power: '255 hp',
-    acceleration: '5.7 seconds',
-    topSpeed: '240 km/h',
-    warranty: '1 Year',
-    description: 'This Mercedes-Benz C-Class is in excellent condition with one careful previous owner. The hybrid engine provides excellent fuel economy without compromising on performance. Comes with a full service history and our comprehensive warranty package.',
-    features: ['Panoramic Sunroof', 'Lane Departure Warning', 'Apple CarPlay & Android Auto', 'Leather Seats', 'Power Windows', 'Heated Seats', 'Blind Spot Detection', 'Navigation System', 'Parking Sensors', 'Ambient Lighting'],
-    images: ['/lovable-uploads/b680f084-4e82-4cd7-b1b0-d442e1e1930e.png', '/placeholder.svg', '/placeholder.svg'],
-    status: 'featured'
-  },
-  {
-    id: '3',
-    make: 'Audi',
-    model: 'A4',
-    year: 2022,
-    price: 4500000,
-    mileage: 18000,
-    fuelType: 'Petrol',
-    transmission: 'Automatic',
-    exteriorColor: 'Daytona Grey',
-    interiorColor: 'Black',
-    previousOwners: 1,
-    engineSize: '2.0L',
-    power: '248 hp',
-    acceleration: '5.6 seconds',
-    topSpeed: '210 km/h',
-    warranty: '1 Year',
-    description: 'This Audi A4 is in pristine condition with low mileage. It features Audi\'s renowned Quattro all-wheel drive system for exceptional handling in all conditions. The vehicle has been thoroughly inspected and comes with our premium warranty package.',
-    features: ['Panoramic Sunroof', 'Lane Departure Warning', 'Apple CarPlay & Android Auto', 'Leather Seats', 'Power Windows', 'Heated Seats', 'Blind Spot Detection', 'Navigation System', 'Parking Sensors', 'Premium Sound System'],
-    images: ['/lovable-uploads/53c68334-47d0-4eca-8459-4b1289042e3a.png', '/placeholder.svg', '/placeholder.svg'],
-    status: 'featured'
-  }
-];
+import { supabase } from '@/integrations/supabase/client';
 
 interface CarContextType {
   cars: Car[];
@@ -110,16 +41,85 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     featuredCars: 0,
   });
 
-  useEffect(() => {
-    // Load cars from local storage or use sample data
-    const storedCars = localStorage.getItem('cars');
-    if (storedCars) {
-      setCars(JSON.parse(storedCars));
-    } else {
-      setCars(sampleCars);
-      localStorage.setItem('cars', JSON.stringify(sampleCars));
+  // Transform Supabase data to our Car type
+  const transformSupabaseCars = (supabaseCars: any[]): Car[] => {
+    return supabaseCars.map(car => ({
+      id: car.id,
+      make: car.make,
+      model: car.model,
+      year: car.year,
+      price: car.price,
+      mileage: car.mileage,
+      fuelType: car.fuel_type,
+      transmission: car.transmission,
+      exteriorColor: car.exterior_color,
+      interiorColor: car.interior_color,
+      previousOwners: car.previous_owners,
+      engineSize: car.engine_size,
+      power: car.power,
+      acceleration: car.acceleration,
+      topSpeed: car.top_speed,
+      warranty: car.warranty,
+      description: car.description,
+      features: car.features,
+      images: car.images,
+      status: car.status,
+    }));
+  };
+
+  // Transform our Car type to Supabase format
+  const transformCarToSupabase = (car: Car | CarFormData) => {
+    return {
+      make: car.make,
+      model: car.model,
+      year: car.year,
+      price: car.price,
+      mileage: car.mileage,
+      fuel_type: car.fuelType,
+      transmission: car.transmission,
+      exterior_color: car.exteriorColor,
+      interior_color: car.interiorColor,
+      previous_owners: car.previousOwners,
+      engine_size: car.engineSize,
+      power: car.power,
+      acceleration: car.acceleration,
+      top_speed: car.topSpeed,
+      warranty: car.warranty,
+      description: car.description,
+      features: car.features,
+      images: car.images,
+      status: (car as Car).status || 'active',
+    };
+  };
+
+  // Fetch cars from Supabase
+  const fetchCars = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('cars')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        const transformedCars = transformSupabaseCars(data);
+        setCars(transformedCars);
+      }
+    } catch (error: any) {
+      console.error('Error fetching cars:', error.message);
+      setError('Failed to fetch cars');
+      toast.error('Failed to fetch cars');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchCars();
   }, []);
 
   useEffect(() => {
@@ -131,26 +131,33 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         soldCars: cars.filter(car => car.status === 'sold').length,
         featuredCars: cars.filter(car => car.status === 'featured').length,
       });
-      // Save to local storage
-      localStorage.setItem('cars', JSON.stringify(cars));
     }
   }, [cars]);
 
   const addCar = async (carData: CarFormData) => {
     try {
       setIsLoading(true);
-      const newCar: Car = {
-        ...carData,
-        id: Date.now().toString(),
-        status: carData.status || 'active',
-      };
+      const supabaseData = transformCarToSupabase(carData);
       
-      setCars(prevCars => [...prevCars, newCar]);
-      toast.success('Car added successfully');
-    } catch (err) {
+      const { data, error } = await supabase
+        .from('cars')
+        .insert(supabaseData)
+        .select()
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        const newCar = transformSupabaseCars([data])[0];
+        setCars(prevCars => [newCar, ...prevCars]);
+        toast.success('Car added successfully');
+      }
+    } catch (error: any) {
       setError('Failed to add car');
-      toast.error('Failed to add car');
-      console.error(err);
+      toast.error(`Failed to add car: ${error.message}`);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -159,16 +166,51 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const updateCar = async (id: string, carData: Partial<Car>) => {
     try {
       setIsLoading(true);
+      
+      // Convert to Supabase format (only for the updated fields)
+      const updateData: any = {};
+      
+      if (carData.make) updateData.make = carData.make;
+      if (carData.model) updateData.model = carData.model;
+      if (carData.year) updateData.year = carData.year;
+      if (carData.price) updateData.price = carData.price;
+      if (carData.mileage) updateData.mileage = carData.mileage;
+      if (carData.fuelType) updateData.fuel_type = carData.fuelType;
+      if (carData.transmission) updateData.transmission = carData.transmission;
+      if (carData.exteriorColor) updateData.exterior_color = carData.exteriorColor;
+      if (carData.interiorColor) updateData.interior_color = carData.interiorColor;
+      if (carData.previousOwners !== undefined) updateData.previous_owners = carData.previousOwners;
+      if (carData.engineSize) updateData.engine_size = carData.engineSize;
+      if (carData.power) updateData.power = carData.power;
+      if (carData.acceleration) updateData.acceleration = carData.acceleration;
+      if (carData.topSpeed) updateData.top_speed = carData.topSpeed;
+      if (carData.warranty) updateData.warranty = carData.warranty;
+      if (carData.description) updateData.description = carData.description;
+      if (carData.features) updateData.features = carData.features;
+      if (carData.images) updateData.images = carData.images;
+      if (carData.status) updateData.status = carData.status;
+
+      const { error } = await supabase
+        .from('cars')
+        .update(updateData)
+        .eq('id', id);
+
+      if (error) {
+        throw error;
+      }
+
+      // Update local state after successful update
       setCars(prevCars => 
         prevCars.map(car => 
           car.id === id ? { ...car, ...carData } : car
         )
       );
+      
       toast.success('Car updated successfully');
-    } catch (err) {
+    } catch (error: any) {
       setError('Failed to update car');
-      toast.error('Failed to update car');
-      console.error(err);
+      toast.error(`Failed to update car: ${error.message}`);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -177,12 +219,23 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const deleteCar = async (id: string) => {
     try {
       setIsLoading(true);
+      
+      const { error } = await supabase
+        .from('cars')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        throw error;
+      }
+
+      // Update local state after successful deletion
       setCars(prevCars => prevCars.filter(car => car.id !== id));
       toast.success('Car removed successfully');
-    } catch (err) {
+    } catch (error: any) {
       setError('Failed to delete car');
-      toast.error('Failed to delete car');
-      console.error(err);
+      toast.error(`Failed to delete car: ${error.message}`);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }

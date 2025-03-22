@@ -9,7 +9,81 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      cars: {
+        Row: {
+          acceleration: string
+          created_at: string | null
+          description: string
+          engine_size: string
+          exterior_color: string
+          features: string[]
+          fuel_type: string
+          id: string
+          images: string[]
+          interior_color: string
+          make: string
+          mileage: number
+          model: string
+          power: string
+          previous_owners: number
+          price: number
+          status: string
+          top_speed: string
+          transmission: string
+          updated_at: string | null
+          warranty: string
+          year: number
+        }
+        Insert: {
+          acceleration: string
+          created_at?: string | null
+          description: string
+          engine_size: string
+          exterior_color: string
+          features?: string[]
+          fuel_type: string
+          id?: string
+          images?: string[]
+          interior_color: string
+          make: string
+          mileage: number
+          model: string
+          power: string
+          previous_owners?: number
+          price: number
+          status: string
+          top_speed: string
+          transmission: string
+          updated_at?: string | null
+          warranty: string
+          year: number
+        }
+        Update: {
+          acceleration?: string
+          created_at?: string | null
+          description?: string
+          engine_size?: string
+          exterior_color?: string
+          features?: string[]
+          fuel_type?: string
+          id?: string
+          images?: string[]
+          interior_color?: string
+          make?: string
+          mileage?: number
+          model?: string
+          power?: string
+          previous_owners?: number
+          price?: number
+          status?: string
+          top_speed?: string
+          transmission?: string
+          updated_at?: string | null
+          warranty?: string
+          year?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
