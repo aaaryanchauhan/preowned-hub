@@ -61,9 +61,9 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       topSpeed: car.top_speed,
       warranty: car.warranty,
       description: car.description,
-      features: car.features,
-      images: car.images,
-      status: car.status,
+      features: car.features || [],  // Ensure features is always an array
+      images: car.images || [],      // Ensure images is always an array
+      status: car.status || 'active',
     }));
   };
 
@@ -86,8 +86,8 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       top_speed: car.topSpeed,
       warranty: car.warranty,
       description: car.description,
-      features: car.features,
-      images: car.images,
+      features: car.features || [],
+      images: car.images || [],
       status: (car as Car).status || 'active',
     };
   };
@@ -96,18 +96,24 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const fetchCars = async () => {
     try {
       setIsLoading(true);
+      console.log('Fetching cars from Supabase');
+      
       const { data, error } = await supabase
         .from('cars')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) {
+        console.error('Error details:', error);
         throw error;
       }
 
       if (data) {
+        console.log('Cars fetched successfully:', data.length, 'cars');
         const transformedCars = transformSupabaseCars(data);
         setCars(transformedCars);
+      } else {
+        console.log('No cars data returned');
       }
     } catch (error: any) {
       console.error('Error fetching cars:', error.message);
@@ -120,6 +126,19 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     fetchCars();
+    
+    // Set up a subscription to listen for changes
+    const subscription = supabase
+      .channel('public:cars')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'cars' }, payload => {
+        console.log('Database change detected:', payload);
+        fetchCars();
+      })
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -139,6 +158,8 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setIsLoading(true);
       const supabaseData = transformCarToSupabase(carData);
       
+      console.log('Adding car to Supabase:', supabaseData);
+      
       const { data, error } = await supabase
         .from('cars')
         .insert(supabaseData)
@@ -146,13 +167,18 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         .single();
 
       if (error) {
+        console.error('Error adding car:', error);
         throw error;
       }
 
       if (data) {
+        console.log('Car added successfully:', data);
         const newCar = transformSupabaseCars([data])[0];
         setCars(prevCars => [newCar, ...prevCars]);
         toast.success('Car added successfully');
+        
+        // Refetch all cars to ensure UI is in sync with the database
+        fetchCars();
       }
     } catch (error: any) {
       setError('Failed to add car');
