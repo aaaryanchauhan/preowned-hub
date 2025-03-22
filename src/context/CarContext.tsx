@@ -156,34 +156,58 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const addCar = async (carData: CarFormData) => {
     try {
       setIsLoading(true);
+      
+      // Make sure required fields are present
+      if (!carData.make || !carData.model || !carData.year) {
+        throw new Error('Make, model, and year are required');
+      }
+      
+      // Ensure status is set
+      if (!carData.status) {
+        carData = { ...carData, status: 'active' };
+      }
+      
+      // Ensure arrays are properly set
+      carData.features = carData.features || [];
+      carData.images = carData.images || [];
+      
       const supabaseData = transformCarToSupabase(carData);
       
-      console.log('Adding car to Supabase:', supabaseData);
+      console.log('Adding car to Supabase with data:', JSON.stringify(supabaseData, null, 2));
       
+      // First try with select() to see detailed response
       const { data, error } = await supabase
         .from('cars')
         .insert(supabaseData)
-        .select()
-        .single();
+        .select();
 
       if (error) {
-        console.error('Error adding car:', error);
-        throw error;
+        console.error('Error details from Supabase:', error);
+        throw new Error(`Supabase error: ${error.message}`);
       }
 
-      if (data) {
-        console.log('Car added successfully:', data);
-        const newCar = transformSupabaseCars([data])[0];
-        setCars(prevCars => [newCar, ...prevCars]);
+      if (data && data.length > 0) {
+        console.log('Car added successfully, response data:', data);
+        const newCars = transformSupabaseCars(data);
+        
+        // Update local state with new cars
+        setCars(prevCars => [...newCars, ...prevCars]);
+        
+        // Show success notification
         toast.success('Car added successfully');
         
-        // Refetch all cars to ensure UI is in sync with the database
-        fetchCars();
+        // Refetch all cars to ensure state is in sync
+        await fetchCars();
+      } else {
+        console.warn('Car was added but no data returned from Supabase');
+        // Refetch cars anyway to ensure we have latest data
+        await fetchCars();
       }
     } catch (error: any) {
-      setError('Failed to add car');
-      toast.error(`Failed to add car: ${error.message}`);
-      console.error(error);
+      const errorMessage = error.message || 'Failed to add car';
+      console.error('Failed to add car:', errorMessage);
+      setError(errorMessage);
+      toast.error(`Failed to add car: ${errorMessage}`);
     } finally {
       setIsLoading(false);
     }
