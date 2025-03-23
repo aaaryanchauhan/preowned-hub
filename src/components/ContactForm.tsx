@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { ContactFormData } from '@/types';
+import { Phone, MessageSquare } from 'lucide-react';
 
 interface ContactFormProps {
   defaultMessage?: string;
@@ -116,9 +117,11 @@ const ContactForm: React.FC<ContactFormProps> = ({ defaultMessage = '' }) => {
       
       <div className="flex justify-around pt-4">
         <a href="tel:5551234567" className="flex items-center text-gray-700 hover:text-primary">
-          <span className="mr-2 text-sm">(555) 123-4567</span>
+          <Phone className="w-4 h-4 mr-2" />
+          <span className="text-sm">(555) 123-4567</span>
         </a>
         <a href="https://wa.me/5551234567" className="flex items-center text-gray-700 hover:text-primary">
+          <MessageSquare className="w-4 h-4 mr-2" />
           <span className="text-sm">WhatsApp</span>
         </a>
       </div>

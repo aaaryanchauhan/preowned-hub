@@ -8,16 +8,17 @@ import ContactForm from '@/components/ContactForm';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Calendar, Car as CarIcon, Check, Fuel, Gauge } from 'lucide-react';
+import { ArrowLeft, Calendar, Car as CarIcon, Check, Fuel, Gauge, Phone, CreditCard } from 'lucide-react';
 import { cn, formatCurrency } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import { Slider } from '@/components/ui/slider';
+import EmiCalculator from '@/components/EmiCalculator';
 
 const CarDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { getCar } = useCarContext();
   const navigate = useNavigate();
   const [car, setCar] = useState<Car | null>(null);
-  const [activeTab, setActiveTab] = useState<'information' | 'features' | 'financing'>('information');
   
   useEffect(() => {
     if (id) {
@@ -91,91 +92,47 @@ const CarDetails: React.FC = () => {
                 />
               </div>
               
-              <div>
-                <div className="border-b border-gray-200">
-                  <nav className="flex -mb-px space-x-8">
-                    <button
-                      onClick={() => setActiveTab('information')}
-                      className={cn("detail-tab", activeTab === 'information' && "active")}
-                    >
-                      Vehicle Information
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('features')}
-                      className={cn("detail-tab", activeTab === 'features' && "active")}
-                    >
-                      Features
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('financing')}
-                      className={cn("detail-tab", activeTab === 'financing' && "active")}
-                    >
-                      Financing Options
-                    </button>
-                  </nav>
-                </div>
-                
-                <div className="py-6">
-                  {activeTab === 'information' && (
-                    <div className="space-y-6">
-                      <div className="prose prose-gray">
-                        <h3 className="text-lg font-medium mb-3">Description</h3>
-                        <p className="text-gray-700">{car.description}</p>
-                      </div>
-                      
-                      <div>
-                        <h3 className="text-lg font-medium mb-3">Specifications</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-4">
-                          {specs.map((spec, index) => (
-                            <div key={index} className="flex items-center space-x-3">
-                              <div className="bg-gray-100 p-2 rounded-md">
-                                <spec.icon className="w-5 h-5 text-gray-600" />
-                              </div>
-                              <div>
-                                <p className="text-sm text-gray-500">{spec.label}</p>
-                                <p className="font-medium">{spec.value}</p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
+              <div className="space-y-8">
+                {/* Vehicle Information Section */}
+                <div className="space-y-6">
+                  <div className="prose prose-gray">
+                    <h3 className="text-xl font-medium mb-3">Description</h3>
+                    <p className="text-gray-700">{car.description}</p>
+                  </div>
                   
-                  {activeTab === 'features' && (
-                    <div>
-                      <h3 className="text-lg font-medium mb-3">Features & Options</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {car.features.map((feature, index) => (
-                          <div key={index} className="flex items-start space-x-2">
-                            <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                            <span className="text-gray-700">{feature}</span>
+                  <div>
+                    <h3 className="text-xl font-medium mb-3">Specifications</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-4">
+                      {specs.map((spec, index) => (
+                        <div key={index} className="flex items-center space-x-3">
+                          <div className="bg-gray-100 p-2 rounded-md">
+                            <spec.icon className="w-5 h-5 text-gray-600" />
                           </div>
-                        ))}
-                      </div>
+                          <div>
+                            <p className="text-sm text-gray-500">{spec.label}</p>
+                            <p className="font-medium">{spec.value}</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  )}
-                  
-                  {activeTab === 'financing' && (
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-medium mb-3">Financing Options</h3>
-                      <p className="text-gray-700">
-                        We offer flexible financing options to make your purchase easier. 
-                        Contact us for personalized financing plans tailored to your needs.
-                      </p>
-                      
-                      <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <h4 className="font-medium mb-2">Example Monthly Payment</h4>
-                        <p className="text-lg font-bold text-primary">
-                          {formatCurrency(Math.round(car.price / 60))} <span className="text-sm font-normal text-gray-500">/month</span>
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          Based on 60 months with 10% down payment at 7.5% APR. Actual terms may vary.
-                        </p>
-                      </div>
-                    </div>
-                  )}
+                  </div>
                 </div>
+
+                {/* Features Section */}
+                <div>
+                  <h3 className="text-xl font-medium mb-3">Features & Options</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {car.features.map((feature, index) => (
+                      <div key={index} className="flex items-start space-x-2">
+                        <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* EMI Calculator Section */}
+                <EmiCalculator carPrice={car.price} />
               </div>
             </div>
             
