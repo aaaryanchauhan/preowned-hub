@@ -8,6 +8,7 @@ import ContactForm from '@/components/ContactForm';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, Calendar, Car as CarIcon, Check, Fuel, Gauge, Phone, CreditCard } from 'lucide-react';
 import { cn, formatCurrency } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -43,7 +44,7 @@ const CarDetails: React.FC = () => {
   
   const specs = [
     { label: 'Year', value: car.year, icon: Calendar },
-    { label: 'Mileage', value: `${car.mileage.toLocaleString()} km`, icon: Gauge },
+    { label: 'KM Driven', value: `${car.mileage.toLocaleString()} km`, icon: Gauge },
     { label: 'Fuel Type', value: car.fuelType, icon: Fuel },
     { label: 'Transmission', value: car.transmission, icon: CarIcon },
     { label: 'Engine', value: car.engineSize, icon: CarIcon },
@@ -104,7 +105,7 @@ const CarDetails: React.FC = () => {
                     <h3 className="text-xl font-medium mb-3">Specifications</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-4">
                       {specs.map((spec, index) => (
-                        <div key={index} className="flex items-center space-x-3">
+                        <div key={index} className="flex items-center space-x-3 bg-gray-50 p-3 rounded-md border border-gray-100">
                           <div className="bg-gray-100 p-2 rounded-md">
                             <spec.icon className="w-5 h-5 text-gray-600" />
                           </div>
@@ -116,6 +117,8 @@ const CarDetails: React.FC = () => {
                       ))}
                     </div>
                   </div>
+                  
+                  <Separator className="my-6" />
                 </div>
 
                 {/* Features Section */}

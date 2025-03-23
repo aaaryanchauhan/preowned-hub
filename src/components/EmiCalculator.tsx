@@ -16,11 +16,13 @@ const EmiCalculator: React.FC<EmiCalculatorProps> = ({ carPrice }) => {
   const maxDownPayment = Math.floor(carPrice * 0.8);
   const minMonths = 12;
   const maxMonths = 84;
-  const interestRate = 7.5; // Annual interest rate in percentage
+  const minInterestRate = 5;
+  const maxInterestRate = 20;
 
   const [loanAmount, setLoanAmount] = useState<number>(Math.floor(carPrice * 0.75));
   const [downPayment, setDownPayment] = useState<number>(Math.floor(carPrice * 0.25));
   const [months, setMonths] = useState<number>(60);
+  const [interestRate, setInterestRate] = useState<number>(7.5);
   const [emi, setEmi] = useState<number>(0);
   const [totalInterest, setTotalInterest] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
@@ -61,6 +63,11 @@ const EmiCalculator: React.FC<EmiCalculatorProps> = ({ carPrice }) => {
   const handleMonthsChange = (value: number[]) => {
     setMonths(value[0]);
   };
+  
+  // Handle interest rate change
+  const handleInterestRateChange = (value: number[]) => {
+    setInterestRate(value[0]);
+  };
 
   // Recalculate EMI whenever inputs change
   useEffect(() => {
@@ -79,7 +86,7 @@ const EmiCalculator: React.FC<EmiCalculatorProps> = ({ carPrice }) => {
           <div className="text-gray-500 text-sm">EMI starting from</div>
           <div className="text-5xl font-bold text-[#4EB69C]">
             <span className="text-lg align-top">₹</span>
-            {formatCurrency(emi).replace('$', '')}
+            {formatCurrency(emi).replace('₹', '').trim()}
             <span className="text-sm font-normal text-gray-500"> per month</span>
           </div>
 
@@ -89,7 +96,7 @@ const EmiCalculator: React.FC<EmiCalculatorProps> = ({ carPrice }) => {
                 <div className="w-3 h-3 rounded-sm bg-[#E0F7F0] mr-2"></div>
                 <span className="text-gray-600">Principal Loan Amount</span>
               </div>
-              <span className="font-medium">₹{formatCurrency(loanAmount).replace('$', '')}</span>
+              <span className="font-medium">₹{formatCurrency(loanAmount).replace('₹', '').trim()}</span>
             </div>
             
             <div className="flex justify-between text-sm">
@@ -97,14 +104,14 @@ const EmiCalculator: React.FC<EmiCalculatorProps> = ({ carPrice }) => {
                 <div className="w-3 h-3 rounded-sm bg-[#4EB69C] mr-2"></div>
                 <span className="text-gray-600">Total Interest Payable</span>
               </div>
-              <span className="font-medium">₹{formatCurrency(totalInterest).replace('$', '')}</span>
+              <span className="font-medium">₹{formatCurrency(totalInterest).replace('₹', '').trim()}</span>
             </div>
             
             <div className="flex justify-between text-sm border-t border-gray-100 pt-4 font-semibold">
               <div className="flex items-center">
                 <span className="text-gray-800">Total Amount Payable</span>
               </div>
-              <span>₹{formatCurrency(totalAmount).replace('$', '')}</span>
+              <span>₹{formatCurrency(totalAmount).replace('₹', '').trim()}</span>
             </div>
           </div>
         </div>
@@ -113,7 +120,7 @@ const EmiCalculator: React.FC<EmiCalculatorProps> = ({ carPrice }) => {
           <div className="space-y-1">
             <div className="flex justify-between">
               <label className="text-[#1A1F2C] font-medium">Loan Amount</label>
-              <span className="text-[#8B5CF6] font-semibold">₹{formatCurrency(loanAmount).replace('$', '')}</span>
+              <span className="text-[#8B5CF6] font-semibold">₹{formatCurrency(loanAmount).replace('₹', '').trim()}</span>
             </div>
             <Slider
               value={[loanAmount]}
@@ -124,15 +131,15 @@ const EmiCalculator: React.FC<EmiCalculatorProps> = ({ carPrice }) => {
               className="my-4"
             />
             <div className="flex justify-between text-sm text-gray-500">
-              <span>₹{formatCurrency(minLoanAmount).replace('$', '')}</span>
-              <span>₹{formatCurrency(maxLoanAmount).replace('$', '')}</span>
+              <span>₹{formatCurrency(minLoanAmount).replace('₹', '').trim()}</span>
+              <span>₹{formatCurrency(maxLoanAmount).replace('₹', '').trim()}</span>
             </div>
           </div>
 
           <div className="space-y-1">
             <div className="flex justify-between">
               <label className="text-[#1A1F2C] font-medium">Down Payment<sup>*</sup></label>
-              <span className="text-[#8B5CF6] font-semibold">₹{formatCurrency(downPayment).replace('$', '')}</span>
+              <span className="text-[#8B5CF6] font-semibold">₹{formatCurrency(downPayment).replace('₹', '').trim()}</span>
             </div>
             <Slider
               value={[downPayment]}
@@ -143,8 +150,27 @@ const EmiCalculator: React.FC<EmiCalculatorProps> = ({ carPrice }) => {
               className="my-4"
             />
             <div className="flex justify-between text-sm text-gray-500">
-              <span>₹{formatCurrency(minDownPayment).replace('$', '')}</span>
-              <span>₹{formatCurrency(maxDownPayment).replace('$', '')}</span>
+              <span>₹{formatCurrency(minDownPayment).replace('₹', '').trim()}</span>
+              <span>₹{formatCurrency(maxDownPayment).replace('₹', '').trim()}</span>
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <div className="flex justify-between">
+              <label className="text-[#1A1F2C] font-medium">Interest Rate (%)</label>
+              <span className="text-[#8B5CF6] font-semibold">{interestRate.toFixed(1)}%</span>
+            </div>
+            <Slider
+              value={[interestRate]}
+              min={minInterestRate}
+              max={maxInterestRate}
+              step={0.1}
+              onValueChange={handleInterestRateChange}
+              className="my-4"
+            />
+            <div className="flex justify-between text-sm text-gray-500">
+              <span>{minInterestRate}%</span>
+              <span>{maxInterestRate}%</span>
             </div>
           </div>
 
@@ -166,10 +192,6 @@ const EmiCalculator: React.FC<EmiCalculatorProps> = ({ carPrice }) => {
               <span>{maxMonths} Months</span>
             </div>
           </div>
-
-          <Button className="w-full bg-[#8B5CF6] hover:bg-[#7E69AB]">
-            CHECK ELIGIBILITY
-          </Button>
 
           <div className="text-xs text-gray-500 space-y-4">
             <p><sup>*</sup>Processing fee and other loan charges are not included.</p>

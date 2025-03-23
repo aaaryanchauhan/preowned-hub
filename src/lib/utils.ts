@@ -7,5 +7,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatCurrency(amount: number): string {
-  return `₹ ${amount.toLocaleString()}`;
+  return `${amount.toLocaleString()}`;
 }
