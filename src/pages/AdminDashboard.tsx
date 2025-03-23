@@ -5,10 +5,11 @@ import AdminSidebar from '@/components/AdminSidebar';
 import DashboardCard from '@/components/DashboardCard';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Car, CircleDollarSign, LogOut, Search, Star, Tag } from 'lucide-react';
+import { Car, CircleDollarSign, LogOut, MessageSquare, Search, Star, Tag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import AuthRequired from '@/components/AuthRequired';
 import { motion } from 'framer-motion';
+import EnquiryManager from '@/components/EnquiryManager';
 
 const AdminDashboard: React.FC = () => {
   const { stats, cars } = useCarContext();
@@ -81,6 +82,11 @@ const AdminDashboard: React.FC = () => {
                 </motion.div>
               ))}
             </div>
+          </div>
+          
+          {/* Customer Enquiries Section */}
+          <div className="mb-8">
+            <EnquiryManager />
           </div>
           
           <div className="bg-white rounded-xl shadow-sm p-6">

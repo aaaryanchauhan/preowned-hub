@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { ContactFormData } from '@/types';
 import { Phone, MessageSquare } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ContactFormProps {
   defaultMessage?: string;
@@ -24,12 +25,28 @@ const ContactForm: React.FC<ContactFormProps> = ({ defaultMessage = '' }) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Save the enquiry to Supabase
+      const { error } = await supabase
+        .from('enquiries')
+        .insert([
+          { 
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            message: formData.message,
+            status: 'new'
+          }
+        ]);
+        
+      if (error) {
+        throw error;
+      }
+      
       toast.success('Message sent successfully!');
       setFormData({
         name: '',
@@ -37,8 +54,12 @@ const ContactForm: React.FC<ContactFormProps> = ({ defaultMessage = '' }) => {
         phone: '',
         message: '',
       });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error('Failed to send message. Please try again.');
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
   
   return (
