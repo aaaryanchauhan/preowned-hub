@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -33,15 +32,13 @@ const ContactForm: React.FC<ContactFormProps> = ({ defaultMessage = '' }) => {
       // Save the enquiry to Supabase
       const { error } = await supabase
         .from('enquiries')
-        .insert([
-          { 
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            message: formData.message,
-            status: 'new'
-          }
-        ]);
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.message,
+          status: 'new'
+        });
         
       if (error) {
         throw error;
