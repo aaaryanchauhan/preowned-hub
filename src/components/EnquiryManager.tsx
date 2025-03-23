@@ -1,20 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { formatDate } from '@/lib/utils';
-import { Phone, Mail, Calendar, User, MessageSquare } from 'lucide-react';
+import { Phone, Mail, Calendar, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-
-interface Enquiry {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-  created_at: string;
-  status: string;
-}
+import { Enquiry } from '@/types';
 
 const EnquiryManager: React.FC = () => {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
@@ -36,7 +26,7 @@ const EnquiryManager: React.FC = () => {
         throw error;
       }
       
-      setEnquiries(data || []);
+      setEnquiries(data as Enquiry[] || []);
     } catch (error) {
       console.error('Error fetching enquiries:', error);
       toast.error('Failed to load enquiries');

@@ -1,4 +1,3 @@
-
 export interface Car {
   id: string;
   make: string;
@@ -38,4 +37,14 @@ export interface ContactFormData {
   email: string;
   phone: string;
   message: string;
+}
+
+export interface Enquiry {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  created_at: string;
+  status: string;
 }
