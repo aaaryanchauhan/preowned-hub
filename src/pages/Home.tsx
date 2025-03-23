@@ -8,6 +8,7 @@ import { ArrowRight, Car, Phone, ShieldCheck, Tag } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
+import { AnimatedTestimonials } from '@/components/ui/animated-testimonials';
 
 const Home: React.FC = () => {
   const { getFilteredCars } = useCarContext();
@@ -33,6 +34,44 @@ const Home: React.FC = () => {
       icon: Phone,
       title: 'Personalized Service',
       description: 'Dedicated consultants to assist you throughout your purchase journey.',
+    },
+  ];
+
+  const testimonials = [
+    {
+      quote:
+        "I was amazed by the quality of vehicles available. My new car exceeded all expectations and the financing options made it affordable.",
+      name: "Sarah Chen",
+      designation: "Business Owner",
+      src: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=3560&auto=format&fit=crop&ixlib=rb-4.0.3",
+    },
+    {
+      quote:
+        "The EMI calculator helped me plan my budget perfectly. The entire buying process was transparent and straightforward.",
+      name: "Michael Rodriguez",
+      designation: "Software Engineer",
+      src: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3",
+    },
+    {
+      quote:
+        "Their attention to detail and vehicle inspection standards are impressive. I feel confident in my purchase knowing it's been thoroughly checked.",
+      name: "Emily Watson",
+      designation: "Doctor",
+      src: "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3",
+    },
+    {
+      quote:
+        "The customer service was exceptional from start to finish. They helped me find the perfect car within my budget.",
+      name: "James Kim",
+      designation: "Marketing Director",
+      src: "https://images.unsplash.com/photo-1636041293178-808a6762ab39?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3",
+    },
+    {
+      quote:
+        "As a first-time buyer, I appreciated how they explained every step of the process. Their warranty options gave me peace of mind.",
+      name: "Lisa Thompson",
+      designation: "Teacher",
+      src: "https://images.unsplash.com/photo-1624561172888-ac93c696e10c?q=80&w=2592&auto=format&fit=crop&ixlib=rb-4.0.3",
     },
   ];
   
@@ -115,6 +154,19 @@ const Home: React.FC = () => {
                 </Link>
               </Button>
             </div>
+          </div>
+        </section>
+        
+        {/* Testimonials Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="mb-10 text-center">
+              <h2 className="text-3xl font-bold mb-4">What Our Customers Say</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Hear from real customers who found their perfect vehicle through our service.
+              </p>
+            </div>
+            <AnimatedTestimonials testimonials={testimonials} autoplay={true} />
           </div>
         </section>
         

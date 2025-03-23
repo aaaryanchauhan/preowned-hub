@@ -9,10 +9,22 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, Calendar, Car as CarIcon, Check, Fuel, Gauge, Phone, CreditCard } from 'lucide-react';
+import { 
+  ArrowLeft, 
+  Calendar, 
+  Gauge, 
+  Fuel, 
+  Settings, 
+  Activity, 
+  Palette, 
+  User, 
+  ShieldCheck, 
+  Check, 
+  Phone, 
+  CreditCard 
+} from 'lucide-react';
 import { cn, formatCurrency } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { Slider } from '@/components/ui/slider';
 import EmiCalculator from '@/components/EmiCalculator';
 
 const CarDetails: React.FC = () => {
@@ -46,13 +58,13 @@ const CarDetails: React.FC = () => {
     { label: 'Year', value: car.year, icon: Calendar },
     { label: 'KM Driven', value: `${car.mileage.toLocaleString()} km`, icon: Gauge },
     { label: 'Fuel Type', value: car.fuelType, icon: Fuel },
-    { label: 'Transmission', value: car.transmission, icon: CarIcon },
-    { label: 'Engine', value: car.engineSize, icon: CarIcon },
-    { label: 'Power', value: car.power, icon: CarIcon },
-    { label: 'Exterior Color', value: car.exteriorColor, icon: CarIcon },
-    { label: 'Interior Color', value: car.interiorColor, icon: CarIcon },
-    { label: 'Previous Owners', value: car.previousOwners, icon: CarIcon },
-    { label: 'Warranty', value: car.warranty, icon: CarIcon },
+    { label: 'Transmission', value: car.transmission, icon: Settings },
+    { label: 'Engine', value: car.engineSize, icon: Activity },
+    { label: 'Power', value: car.power, icon: Activity },
+    { label: 'Exterior Color', value: car.exteriorColor, icon: Palette },
+    { label: 'Interior Color', value: car.interiorColor, icon: Palette },
+    { label: 'Previous Owners', value: car.previousOwners, icon: User },
+    { label: 'Warranty', value: car.warranty, icon: ShieldCheck },
   ];
   
   return (
@@ -102,7 +114,7 @@ const CarDetails: React.FC = () => {
                   </div>
                   
                   <div>
-                    <h3 className="text-xl font-medium mb-3">Specifications</h3>
+                    <h3 className="text-xl font-medium mb-4">Specifications</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-x-8 gap-y-4">
                       {specs.map((spec, index) => (
                         <div key={index} className="flex items-center space-x-3 bg-gray-50 p-3 rounded-md border border-gray-100">
