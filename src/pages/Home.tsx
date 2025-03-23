@@ -78,7 +78,7 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
                 <img
-                  src="/lovable-uploads/b4ae5582-60b7-4159-a0ce-2166741b8c64.png"
+                  src="https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80"
                   alt="Premium pre-owned car"
                   className="rounded-lg shadow-lg w-full h-auto max-h-96 object-cover"
                 />
