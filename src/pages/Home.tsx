@@ -92,6 +92,69 @@ const Home: React.FC = () => {
           </div>
         </section>
         
+        {/* Brand Logos Section */}
+        <section className="py-10 bg-white border-b border-gray-200">
+          <div className="container mx-auto px-4">
+            <motion.div 
+              className="flex flex-wrap justify-center items-center gap-8 md:gap-12 lg:gap-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              <div className="w-24 h-16 flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/17e6cc6b-a8d7-4ca0-a74d-9a696848cf32.png" 
+                  alt="Volvo" 
+                  className="max-h-12 w-auto object-contain"
+                />
+              </div>
+              <div className="w-24 h-16 flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/ec2cf5fb-5bc6-4bbd-bf09-722218fa0838.png" 
+                  alt="Toyota" 
+                  className="max-h-12 w-auto object-contain"
+                />
+              </div>
+              <div className="w-24 h-16 flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/3bd24fba-da8d-46e5-85c5-33230ecc0079.png" 
+                  alt="Tata Motors" 
+                  className="max-h-10 w-auto object-contain"
+                />
+              </div>
+              <div className="w-24 h-16 flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/bbd581b6-425c-4eb1-8f5f-7df9087174a8.png" 
+                  alt="BMW" 
+                  className="max-h-14 w-auto object-contain"
+                />
+              </div>
+              <div className="w-24 h-16 flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/262abbe3-d57a-4cb0-87ee-0409554ccf7d.png" 
+                  alt="Mercedes-Benz" 
+                  className="max-h-14 w-auto object-contain"
+                />
+              </div>
+              <div className="w-24 h-16 flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/48f176eb-fe33-4044-8005-3c80cdc9df2d.png" 
+                  alt="MG" 
+                  className="max-h-10 w-auto object-contain"
+                />
+              </div>
+              <div className="w-24 h-16 flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/6f63f253-300b-4f37-9000-ca3af8f7edbd.png" 
+                  alt="Kia" 
+                  className="max-h-8 w-auto object-contain"
+                />
+              </div>
+            </motion.div>
+          </div>
+        </section>
+        
         {/* Featured Cars Section */}
         <section className="py-16">
           <div className="container mx-auto px-4">
