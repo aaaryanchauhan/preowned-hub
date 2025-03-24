@@ -95,8 +95,8 @@ const Home: React.FC = () => {
           </div>
         </section>
         
-        {/* Brand Logos Section - REDUCED SIZE */}
-        <section className="py-10 bg-white border-b border-gray-100">
+        {/* Brand Logos Section - HIDDEN ON MOBILE */}
+        <section className="py-10 bg-white border-b border-gray-100 hidden md:block">
           <div className="container mx-auto px-4">
             <motion.div 
               className="flex flex-wrap justify-center items-center gap-6 md:gap-10 lg:gap-14"
@@ -158,7 +158,7 @@ const Home: React.FC = () => {
           </div>
         </section>
         
-        {/* Featured Cars Section - MOVED UP */}
+        {/* Featured Cars Section */}
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-4">
             <div className="mb-10 text-center">
@@ -185,7 +185,7 @@ const Home: React.FC = () => {
           </div>
         </section>
         
-        {/* Customer Showcase Section - REDESIGNED */}
+        {/* Customer Showcase Section */}
         <section className="py-16 bg-gradient-to-r from-gray-50 to-gray-100">
           <div className="container mx-auto px-4">
             <div className="text-center mb-10">
