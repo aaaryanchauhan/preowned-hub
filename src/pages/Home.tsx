@@ -10,6 +10,7 @@ import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { Testimonials } from '@/components/ui/testimonials';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { CustomerShowcase } from '@/components/CustomerShowcase';
 
 const Home: React.FC = () => {
   const { getFilteredCars } = useCarContext();
@@ -37,29 +38,6 @@ const Home: React.FC = () => {
       title: 'Personalized Service',
       description: 'Dedicated consultants to assist you throughout your purchase journey.',
     },
-  ];
-
-  const howItWorksSteps = [
-    {
-      image: "/lovable-uploads/804c243b-f848-4fbe-b0f9-cfbb242f076e.png",
-      title: "BROWSE FROM OUR COLLECTION",
-      description: "Explore our extensive inventory of premium pre-owned vehicles."
-    },
-    {
-      image: "/lovable-uploads/804c243b-f848-4fbe-b0f9-cfbb242f076e.png",
-      title: "GET TO KNOW YOUR RIDE",
-      description: "Schedule a test drive or virtual tour of your selected vehicle."
-    },
-    {
-      image: "/lovable-uploads/804c243b-f848-4fbe-b0f9-cfbb242f076e.png",
-      title: "PAY & BOOK ONLINE OR VISIT SHOWROOM",
-      description: "Secure your vehicle with flexible payment options."
-    },
-    {
-      image: "/lovable-uploads/804c243b-f848-4fbe-b0f9-cfbb242f076e.png",
-      title: "INSTANT PAYMENT & TRANSFER",
-      description: "Complete your purchase and drive away with your dream car."
-    }
   ];
   
   return (
@@ -127,90 +105,70 @@ const Home: React.FC = () => {
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <div className="w-28 h-20 flex items-center justify-center">
+              <div className="w-42 h-30 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/17e6cc6b-a8d7-4ca0-a74d-9a696848cf32.png" 
                   alt="Volvo" 
-                  className="max-h-18 w-auto object-contain"
+                  className="max-h-27 w-auto object-contain"
                 />
               </div>
-              <div className="w-28 h-20 flex items-center justify-center">
+              <div className="w-42 h-30 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/ec2cf5fb-5bc6-4bbd-bf09-722218fa0838.png" 
                   alt="Toyota" 
-                  className="max-h-18 w-auto object-contain"
+                  className="max-h-27 w-auto object-contain"
                 />
               </div>
-              <div className="w-28 h-20 flex items-center justify-center">
+              <div className="w-42 h-30 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/3bd24fba-da8d-46e5-85c5-33230ecc0079.png" 
                   alt="Tata Motors" 
-                  className="max-h-15 w-auto object-contain"
+                  className="max-h-22 w-auto object-contain"
                 />
               </div>
-              <div className="w-28 h-20 flex items-center justify-center">
+              <div className="w-42 h-30 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/bbd581b6-425c-4eb1-8f5f-7df9087174a8.png" 
                   alt="BMW" 
-                  className="max-h-21 w-auto object-contain"
+                  className="max-h-32 w-auto object-contain"
                 />
               </div>
-              <div className="w-28 h-20 flex items-center justify-center">
+              <div className="w-42 h-30 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/262abbe3-d57a-4cb0-87ee-0409554ccf7d.png" 
                   alt="Mercedes-Benz" 
-                  className="max-h-21 w-auto object-contain"
+                  className="max-h-32 w-auto object-contain"
                 />
               </div>
-              <div className="w-28 h-20 flex items-center justify-center">
+              <div className="w-42 h-30 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/48f176eb-fe33-4044-8005-3c80cdc9df2d.png" 
                   alt="MG" 
-                  className="max-h-15 w-auto object-contain"
+                  className="max-h-22 w-auto object-contain"
                 />
               </div>
-              <div className="w-28 h-20 flex items-center justify-center">
+              <div className="w-42 h-30 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/6f63f253-300b-4f37-9000-ca3af8f7edbd.png" 
                   alt="Kia" 
-                  className="max-h-12 w-auto object-contain"
+                  className="max-h-18 w-auto object-contain"
                 />
               </div>
             </motion.div>
           </div>
         </section>
         
-        {/* How It Works Section */}
+        {/* Customer Showcase Section - Adding instead of How It Works */}
         <section className="py-16 bg-gray-900 text-white">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">HOW IT WORKS</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">OUR SATISFIED CUSTOMERS</h2>
               <p className="text-gray-300 max-w-3xl mx-auto text-base md:text-lg">
-                Buying used luxury cars was never this easy. You can now own your dream luxury car in just 4 simple 
-                steps at PreownedHub, India's trusted used car portal.
+                See what our customers are driving. Join the PreownedHub family and find your perfect ride today.
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mt-12">
-              {howItWorksSteps.map((step, index) => (
-                <motion.div 
-                  key={index}
-                  className="flex flex-col items-center text-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <img 
-                    src={step.image} 
-                    alt={step.title} 
-                    className="h-40 object-contain mb-6"
-                  />
-                  <h3 className="text-lg font-bold mb-2 underline decoration-primary decoration-2 underline-offset-4">{step.title}</h3>
-                  <p className="text-gray-300">{step.description}</p>
-                </motion.div>
-              ))}
-            </div>
+            <CustomerShowcase />
           </div>
         </section>
         

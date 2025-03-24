@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { formatDate } from '@/lib/utils';
-import { Phone, Mail, Calendar, MessageSquare } from 'lucide-react';
+import { Phone, Mail, Calendar, MessageSquare, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Enquiry } from '@/types';
@@ -10,22 +11,37 @@ const EnquiryManager: React.FC = () => {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [refreshCount, setRefreshCount] = useState(0);
 
   const fetchEnquiries = async () => {
     setIsLoading(true);
     try {
-      let query = supabase.from('enquiries').select('*').order('created_at', { ascending: false });
+      // First ensure we can connect to Supabase
+      const { data: testData, error: testError } = await supabase
+        .from('enquiries')
+        .select('count(*)');
+        
+      if (testError) {
+        console.error('Error testing connection:', testError);
+      } else {
+        console.log('Supabase connection test successful', testData);
+      }
+      
+      // Now fetch the actual data
+      let query = supabase.from('enquiries').select('*');
       
       if (statusFilter !== 'all') {
         query = query.eq('status', statusFilter);
       }
       
-      const { data, error } = await query;
+      const { data, error } = await query.order('created_at', { ascending: false });
       
       if (error) {
+        console.error('Error details:', error);
         throw error;
       }
       
+      console.log('Enquiries fetched:', data?.length || 0);
       setEnquiries(data as Enquiry[] || []);
     } catch (error) {
       console.error('Error fetching enquiries:', error);
@@ -43,16 +59,23 @@ const EnquiryManager: React.FC = () => {
       .channel('enquiries-changes')
       .on('postgres_changes', 
         { event: '*', schema: 'public', table: 'enquiries' }, 
-        () => {
+        (payload) => {
+          console.log('Realtime update received:', payload);
           fetchEnquiries();
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Subscription status:', status);
+      });
       
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [statusFilter]);
+  }, [statusFilter, refreshCount]);
+
+  const handleRefresh = () => {
+    setRefreshCount(prev => prev + 1);
+  };
 
   const updateStatus = async (id: string, newStatus: string) => {
     try {
@@ -100,42 +123,46 @@ const EnquiryManager: React.FC = () => {
     <div className="bg-white rounded-xl shadow-sm p-6">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-medium">Customer Enquiries</h2>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-4">
           <Button 
-            variant={statusFilter === 'all' ? 'default' : 'outline'} 
-            onClick={() => setStatusFilter('all')}
-            size="sm"
+            variant="outline" 
+            size="sm" 
+            className="flex items-center gap-1"
+            onClick={handleRefresh}
           >
-            All
+            <RefreshCw className="h-4 w-4" />
+            Refresh
           </Button>
-          <Button 
-            variant={statusFilter === 'new' ? 'default' : 'outline'} 
-            onClick={() => setStatusFilter('new')}
-            size="sm"
-          >
-            New
-          </Button>
-          <Button 
-            variant={statusFilter === 'in_progress' ? 'default' : 'outline'} 
-            onClick={() => setStatusFilter('in_progress')}
-            size="sm"
-          >
-            In Progress
-          </Button>
-          <Button 
-            variant={statusFilter === 'resolved' ? 'default' : 'outline'} 
-            onClick={() => setStatusFilter('resolved')}
-            size="sm"
-          >
-            Resolved
-          </Button>
-          <Button 
-            variant={statusFilter === 'archived' ? 'default' : 'outline'} 
-            onClick={() => setStatusFilter('archived')}
-            size="sm"
-          >
-            Archived
-          </Button>
+          <div className="flex gap-2">
+            <Button 
+              variant={statusFilter === 'all' ? 'default' : 'outline'} 
+              onClick={() => setStatusFilter('all')}
+              size="sm"
+            >
+              All
+            </Button>
+            <Button 
+              variant={statusFilter === 'new' ? 'default' : 'outline'} 
+              onClick={() => setStatusFilter('new')}
+              size="sm"
+            >
+              New
+            </Button>
+            <Button 
+              variant={statusFilter === 'in_progress' ? 'default' : 'outline'} 
+              onClick={() => setStatusFilter('in_progress')}
+              size="sm"
+            >
+              In Progress
+            </Button>
+            <Button 
+              variant={statusFilter === 'resolved' ? 'default' : 'outline'} 
+              onClick={() => setStatusFilter('resolved')}
+              size="sm"
+            >
+              Resolved
+            </Button>
+          </div>
         </div>
       </div>
       

@@ -50,7 +50,7 @@ const Header: React.FC = () => {
         </nav>
         
         <div className="flex items-center space-x-4">
-          {isAuthenticated ? (
+          {isAuthenticated && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="flex items-center space-x-2">
@@ -73,11 +73,8 @@ const Header: React.FC = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
-            <Button asChild variant="outline">
-              <Link to="/login">Login</Link>
-            </Button>
           )}
+          {/* Login button removed as requested */}
         </div>
       </div>
     </header>

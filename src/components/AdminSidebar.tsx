@@ -3,7 +3,6 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import {
-  BarChart3,
   Car,
   CircleDollarSign,
   Home,
@@ -26,7 +25,6 @@ const AdminSidebar: React.FC = () => {
     { icon: Tag, label: 'Active Listings', path: '/admin/active' },
     { icon: CircleDollarSign, label: 'Sold Cars', path: '/admin/sold' },
     { icon: Star, label: 'Featured Cars', path: '/admin/featured' },
-    { icon: BarChart3, label: 'Reports', path: '/admin/reports' },
     { icon: Settings, label: 'Settings', path: '/admin/settings' },
   ];
   

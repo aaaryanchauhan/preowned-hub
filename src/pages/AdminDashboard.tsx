@@ -1,15 +1,17 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCarContext } from '@/context/CarContext';
 import AdminSidebar from '@/components/AdminSidebar';
 import DashboardCard from '@/components/DashboardCard';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
-import { Car, CircleDollarSign, LogOut, MessageSquare, Search, Star, Tag } from 'lucide-react';
+import { Car, CircleDollarSign, LogOut, Search, Star, Tag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import AuthRequired from '@/components/AuthRequired';
 import { motion } from 'framer-motion';
 import EnquiryManager from '@/components/EnquiryManager';
+import CustomerShowcaseManager from '@/components/CustomerShowcaseManager';
+import { supabase } from '@/integrations/supabase/client';
 
 const AdminDashboard: React.FC = () => {
   const { stats, cars } = useCarContext();
@@ -25,12 +27,33 @@ const AdminDashboard: React.FC = () => {
     return acc;
   }, {} as Record<string, number>);
   
+  // Ensure the customer_showcases table exists
+  useEffect(() => {
+    const checkAndCreateShowcaseTable = async () => {
+      try {
+        // Check if the table exists
+        const { error } = await supabase
+          .from('customer_showcases')
+          .select('id')
+          .limit(1);
+          
+        if (error && error.code === '42P01') { // Table doesn't exist error code
+          console.log('Customer showcase table does not exist. It will be created when adding the first entry.');
+        }
+      } catch (error) {
+        console.error('Error checking customer showcases table:', error);
+      }
+    };
+    
+    checkAndCreateShowcaseTable();
+  }, []);
+
   return (
     <AuthRequired>
       <div className="flex min-h-screen bg-gray-50">
         <AdminSidebar />
         
-        <div className="flex-1 p-8">
+        <div className="flex-1 p-8 overflow-y-auto">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-2xl font-bold">Admin Dashboard</h1>
             
@@ -82,6 +105,11 @@ const AdminDashboard: React.FC = () => {
                 </motion.div>
               ))}
             </div>
+          </div>
+          
+          {/* Customer Showcases Management Section */}
+          <div className="mb-8">
+            <CustomerShowcaseManager />
           </div>
           
           {/* Customer Enquiries Section */}
