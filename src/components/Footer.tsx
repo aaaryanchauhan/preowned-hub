@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Car, Mail, MapPin, Phone } from 'lucide-react';
+import { Car, Mail, MapPin, Phone, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Footer: React.FC = () => {
@@ -40,6 +40,12 @@ const Footer: React.FC = () => {
               <li>
                 <Link to="/contact" className="text-gray-600 hover:text-primary text-sm">
                   Contact
+                </Link>
+              </li>
+              <li>
+                <Link to="/login" className="text-gray-600 hover:text-primary text-sm flex items-center">
+                  <Lock className="w-3 h-3 mr-1" />
+                  <span>Admin</span>
                 </Link>
               </li>
             </ul>
