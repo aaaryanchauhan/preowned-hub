@@ -95,8 +95,8 @@ const Home: React.FC = () => {
           </div>
         </section>
         
-        {/* Brand Logos Section */}
-        <section className="py-10 bg-white border-b border-gray-200">
+        {/* Brand Logos Section - REDUCED SIZE */}
+        <section className="py-10 bg-white border-b border-gray-100">
           <div className="container mx-auto px-4">
             <motion.div 
               className="flex flex-wrap justify-center items-center gap-6 md:gap-10 lg:gap-14"
@@ -105,74 +105,60 @@ const Home: React.FC = () => {
               transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
-              <div className="w-42 h-30 flex items-center justify-center">
+              <div className="w-24 h-16 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/17e6cc6b-a8d7-4ca0-a74d-9a696848cf32.png" 
                   alt="Volvo" 
-                  className="max-h-27 w-auto object-contain"
+                  className="max-h-12 w-auto object-contain"
                 />
               </div>
-              <div className="w-42 h-30 flex items-center justify-center">
+              <div className="w-24 h-16 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/ec2cf5fb-5bc6-4bbd-bf09-722218fa0838.png" 
                   alt="Toyota" 
-                  className="max-h-27 w-auto object-contain"
+                  className="max-h-12 w-auto object-contain"
                 />
               </div>
-              <div className="w-42 h-30 flex items-center justify-center">
+              <div className="w-24 h-16 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/3bd24fba-da8d-46e5-85c5-33230ecc0079.png" 
                   alt="Tata Motors" 
-                  className="max-h-22 w-auto object-contain"
+                  className="max-h-10 w-auto object-contain"
                 />
               </div>
-              <div className="w-42 h-30 flex items-center justify-center">
+              <div className="w-24 h-16 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/bbd581b6-425c-4eb1-8f5f-7df9087174a8.png" 
                   alt="BMW" 
-                  className="max-h-32 w-auto object-contain"
+                  className="max-h-14 w-auto object-contain"
                 />
               </div>
-              <div className="w-42 h-30 flex items-center justify-center">
+              <div className="w-24 h-16 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/262abbe3-d57a-4cb0-87ee-0409554ccf7d.png" 
                   alt="Mercedes-Benz" 
-                  className="max-h-32 w-auto object-contain"
+                  className="max-h-14 w-auto object-contain"
                 />
               </div>
-              <div className="w-42 h-30 flex items-center justify-center">
+              <div className="w-24 h-16 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/48f176eb-fe33-4044-8005-3c80cdc9df2d.png" 
                   alt="MG" 
-                  className="max-h-22 w-auto object-contain"
+                  className="max-h-10 w-auto object-contain"
                 />
               </div>
-              <div className="w-42 h-30 flex items-center justify-center">
+              <div className="w-24 h-16 flex items-center justify-center">
                 <img 
                   src="/lovable-uploads/6f63f253-300b-4f37-9000-ca3af8f7edbd.png" 
                   alt="Kia" 
-                  className="max-h-18 w-auto object-contain"
+                  className="max-h-8 w-auto object-contain"
                 />
               </div>
             </motion.div>
           </div>
         </section>
         
-        {/* Customer Showcase Section - Adding instead of How It Works */}
-        <section className="py-16 bg-gray-900 text-white">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">OUR SATISFIED CUSTOMERS</h2>
-              <p className="text-gray-300 max-w-3xl mx-auto text-base md:text-lg">
-                See what our customers are driving. Join the PreownedHub family and find your perfect ride today.
-              </p>
-            </div>
-            
-            <CustomerShowcase />
-          </div>
-        </section>
-        
-        {/* Featured Cars Section */}
+        {/* Featured Cars Section - MOVED UP */}
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-4">
             <div className="mb-10 text-center">
@@ -196,6 +182,20 @@ const Home: React.FC = () => {
                 </Link>
               </Button>
             </div>
+          </div>
+        </section>
+        
+        {/* Customer Showcase Section - REDESIGNED */}
+        <section className="py-16 bg-gradient-to-r from-gray-50 to-gray-100">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">OUR SATISFIED CUSTOMERS</h2>
+              <p className="text-gray-600 max-w-3xl mx-auto text-base md:text-lg">
+                See what our customers are driving. Join the PreownedHub family and find your perfect ride today.
+              </p>
+            </div>
+            
+            <CustomerShowcase />
           </div>
         </section>
         

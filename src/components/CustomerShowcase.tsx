@@ -79,42 +79,67 @@ export const CustomerShowcase: React.FC = () => {
   };
 
   return (
-    <Carousel 
-      className="w-full max-w-5xl mx-auto"
-      opts={{
-        align: "start",
-        loop: true,
-      }}
-    >
-      <CarouselContent>
-        {customerCars.map((item) => (
-          <CarouselItem key={item.id} className="md:basis-1/2 lg:basis-1/3">
-            <motion.div 
-              className="h-full p-1"
-              whileHover={{ y: -5 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="rounded-xl overflow-hidden flex flex-col h-full bg-gray-800">
-                <div className="aspect-[4/3] bg-gray-700 relative">
-                  <img 
-                    src={item.image} 
-                    alt={item.carName} 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="p-4 text-center">
-                  <h3 className="font-bold text-lg mb-1">{item.carName}</h3>
-                  <p className="text-gray-400">Owned by {item.customerName}</p>
-                </div>
-              </div>
-            </motion.div>
-          </CarouselItem>
+    <div className="max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        {customerCars.slice(0, 5).map((item, index) => (
+          <motion.div 
+            key={item.id}
+            className="relative group overflow-hidden rounded-lg"
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.2 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+          >
+            <div className="aspect-square bg-gray-100 overflow-hidden">
+              <img 
+                src={item.image} 
+                alt={item.carName} 
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+              <h3 className="font-semibold text-base mb-1">{item.carName}</h3>
+              <p className="text-sm text-white/90">Owned by {item.customerName}</p>
+            </div>
+          </motion.div>
         ))}
-      </CarouselContent>
-      <div className="flex justify-center mt-8 gap-4">
-        <CarouselPrevious className="relative static left-0 right-0 translate-y-0 bg-white/20 hover:bg-white/30 border-white/30" />
-        <CarouselNext className="relative static left-0 right-0 translate-y-0 bg-white/20 hover:bg-white/30 border-white/30" />
       </div>
-    </Carousel>
+
+      {/* Mobile carousel for smaller screens */}
+      <div className="block md:hidden mt-6">
+        <Carousel
+          className="w-full"
+          opts={{
+            align: "center",
+            loop: true,
+          }}
+        >
+          <CarouselContent>
+            {customerCars.map((item) => (
+              <CarouselItem key={item.id} className="basis-3/4">
+                <div className="relative overflow-hidden rounded-lg">
+                  <div className="aspect-square bg-gray-100">
+                    <img 
+                      src={item.image} 
+                      alt={item.carName} 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
+                    <h3 className="font-semibold text-base mb-1">{item.carName}</h3>
+                    <p className="text-sm text-white/90">Owned by {item.customerName}</p>
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="flex justify-center mt-4 gap-2">
+            <CarouselPrevious className="relative static left-0 right-0 translate-y-0 bg-white/20 hover:bg-white/30 border-white/30 h-8 w-8" />
+            <CarouselNext className="relative static left-0 right-0 translate-y-0 bg-white/20 hover:bg-white/30 border-white/30 h-8 w-8" />
+          </div>
+        </Carousel>
+      </div>
+    </div>
   );
 };
