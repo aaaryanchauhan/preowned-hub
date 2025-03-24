@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Car } from '@/types';
@@ -26,9 +25,10 @@ import {
 import { cn, formatCurrency } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import EmiCalculator from '@/components/EmiCalculator';
+import { Helmet } from 'react-helmet-async';
 
 const CarDetails: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id, make, model, year } = useParams<{ id: string; make?: string; model?: string; year?: string }>();
   const { getCar } = useCarContext();
   const navigate = useNavigate();
   const [car, setCar] = useState<Car | null>(null);
@@ -38,11 +38,17 @@ const CarDetails: React.FC = () => {
       const foundCar = getCar(id);
       if (foundCar) {
         setCar(foundCar);
+        
+        if (!make && !model && !year) {
+          const seoMake = foundCar.make.toLowerCase().replace(/\s+/g, '-');
+          const seoModel = foundCar.model.toLowerCase().replace(/\s+/g, '-');
+          navigate(`/cars/${seoMake}/${seoModel}/${foundCar.year}/${foundCar.id}`, { replace: true });
+        }
       } else {
         navigate('/not-found');
       }
     }
-  }, [id, getCar, navigate]);
+  }, [id, make, model, year, getCar, navigate]);
   
   if (!car) {
     return (
@@ -67,8 +73,20 @@ const CarDetails: React.FC = () => {
     { label: 'Warranty', value: car.warranty, icon: ShieldCheck },
   ];
   
+  const pageTitle = `${car.year} ${car.make} ${car.model} | Pre-Owned Hub`;
+  const pageDescription = `${car.year} ${car.make} ${car.model} with ${car.mileage.toLocaleString()} km, ${car.fuelType} engine, ${car.transmission} transmission. ${car.description.substring(0, 120)}...`;
+  
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        {car.images[0] && <meta property="og:image" content={car.images[0]} />}
+        <link rel="canonical" href={window.location.href} />
+      </Helmet>
+      
       <Header />
       
       <main className="flex-1 py-8">
@@ -106,7 +124,6 @@ const CarDetails: React.FC = () => {
               </div>
               
               <div className="space-y-8">
-                {/* Vehicle Information Section */}
                 <div className="space-y-6">
                   <div className="prose prose-gray">
                     <h3 className="text-xl font-medium mb-3">Description</h3>
@@ -133,7 +150,6 @@ const CarDetails: React.FC = () => {
                   <Separator className="my-6" />
                 </div>
 
-                {/* Features Section */}
                 <div>
                   <h3 className="text-xl font-medium mb-3">Features & Options</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -146,7 +162,6 @@ const CarDetails: React.FC = () => {
                   </div>
                 </div>
 
-                {/* EMI Calculator Section */}
                 <EmiCalculator carPrice={car.price} />
               </div>
             </div>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { formatDate } from '@/lib/utils';
@@ -12,49 +11,46 @@ const EnquiryManager: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [refreshCount, setRefreshCount] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchEnquiries = async () => {
     setIsLoading(true);
+    setError(null);
+    
     try {
-      // First ensure we can connect to Supabase
-      const { data: testData, error: testError } = await supabase
-        .from('enquiries')
-        .select('count(*)');
-        
-      if (testError) {
-        console.error('Error testing connection:', testError);
-      } else {
-        console.log('Supabase connection test successful', testData);
-      }
+      console.log('Fetching enquiries with filter:', statusFilter);
       
-      // Now fetch the actual data
+      // Build the query
       let query = supabase.from('enquiries').select('*');
       
       if (statusFilter !== 'all') {
         query = query.eq('status', statusFilter);
       }
       
+      // Execute the query with better error handling
       const { data, error } = await query.order('created_at', { ascending: false });
       
       if (error) {
-        console.error('Error details:', error);
-        throw error;
+        console.error('Supabase query error:', error);
+        throw new Error(`Failed to fetch enquiries: ${error.message}`);
       }
       
-      console.log('Enquiries fetched:', data?.length || 0);
+      console.log('Enquiries fetched successfully:', data?.length || 0);
       setEnquiries(data as Enquiry[] || []);
-    } catch (error) {
-      console.error('Error fetching enquiries:', error);
-      toast.error('Failed to load enquiries');
+    } catch (error: any) {
+      console.error('Error in fetchEnquiries:', error);
+      setError(error.message || 'Failed to load enquiries');
+      toast.error('Failed to load enquiries. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
+    console.log('EnquiryManager mounted or dependencies changed');
     fetchEnquiries();
     
-    // Subscribe to realtime changes
+    // Set up realtime subscription
     const channel = supabase
       .channel('enquiries-changes')
       .on('postgres_changes', 
@@ -69,30 +65,35 @@ const EnquiryManager: React.FC = () => {
       });
       
     return () => {
+      console.log('Cleaning up subscription');
       supabase.removeChannel(channel);
     };
   }, [statusFilter, refreshCount]);
 
   const handleRefresh = () => {
+    console.log('Manual refresh triggered');
     setRefreshCount(prev => prev + 1);
   };
 
   const updateStatus = async (id: string, newStatus: string) => {
     try {
+      console.log(`Updating enquiry ${id} status to ${newStatus}`);
+      
       const { error } = await supabase
         .from('enquiries')
         .update({ status: newStatus })
         .eq('id', id);
       
       if (error) {
-        throw error;
+        console.error('Update status error:', error);
+        throw new Error(`Failed to update status: ${error.message}`);
       }
       
       toast.success(`Enquiry marked as ${newStatus}`);
       fetchEnquiries();
-    } catch (error) {
-      console.error('Error updating enquiry status:', error);
-      toast.error('Failed to update status');
+    } catch (error: any) {
+      console.error('Error in updateStatus:', error);
+      toast.error(error.message || 'Failed to update status');
     }
   };
 
@@ -115,6 +116,19 @@ const EnquiryManager: React.FC = () => {
     return (
       <div className="flex justify-center items-center h-48">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="text-center py-8">
+          <MessageSquare className="mx-auto h-12 w-12 text-red-400 mb-3" />
+          <h3 className="text-lg font-medium mb-1">Error Loading Enquiries</h3>
+          <p className="text-gray-500 mb-4">{error}</p>
+          <Button onClick={handleRefresh} variant="outline">Try Again</Button>
+        </div>
       </div>
     );
   }

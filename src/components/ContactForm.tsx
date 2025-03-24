@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -29,8 +30,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ defaultMessage = '' }) => {
     setIsSubmitting(true);
     
     try {
+      console.log('Submitting enquiry:', formData);
+      
       // Save the enquiry to Supabase
-      const { error } = await supabase
+      const { error, data } = await supabase
         .from('enquiries')
         .insert({
           name: formData.name,
@@ -38,22 +41,27 @@ const ContactForm: React.FC<ContactFormProps> = ({ defaultMessage = '' }) => {
           phone: formData.phone,
           message: formData.message,
           status: 'new'
-        });
+        })
+        .select();
         
       if (error) {
-        throw error;
+        console.error('Supabase insert error:', error);
+        throw new Error(`Failed to save enquiry: ${error.message}`);
       }
       
-      toast.success('Message sent successfully!');
+      console.log('Enquiry submitted successfully:', data);
+      toast.success('Message sent successfully! We will contact you shortly.');
+      
+      // Reset the form
       setFormData({
         name: '',
         email: '',
         phone: '',
         message: '',
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting form:', error);
-      toast.error('Failed to send message. Please try again.');
+      toast.error(error.message || 'Failed to send message. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

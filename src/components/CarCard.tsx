@@ -11,6 +11,13 @@ interface CarCardProps {
 }
 
 const CarCard: React.FC<CarCardProps> = ({ car }) => {
+  // Generate a slug from make, model and year for SEO-friendly URLs
+  const generateSeoUrl = () => {
+    const make = car.make.toLowerCase().replace(/\s+/g, '-');
+    const model = car.model.toLowerCase().replace(/\s+/g, '-');
+    return `/cars/${make}/${model}/${car.year}/${car.id}`;
+  };
+
   return (
     <motion.div 
       className="car-card"
@@ -50,7 +57,7 @@ const CarCard: React.FC<CarCardProps> = ({ car }) => {
         </div>
         
         <Link 
-          to={`/cars/${car.id}`}
+          to={generateSeoUrl()}
           className="mt-4 block text-center w-full py-2 bg-gray-100 hover:bg-primary hover:text-white rounded-md text-sm font-medium transition-colors"
         >
           View Details
