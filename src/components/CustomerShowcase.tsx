@@ -86,7 +86,6 @@ export const CustomerShowcase: React.FC = () => {
             key={item.id}
             className="relative group overflow-hidden rounded-lg"
             whileHover={{ y: -5 }}
-            transition={{ duration: 0.2 }}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
