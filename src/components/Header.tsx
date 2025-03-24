@@ -74,7 +74,7 @@ const Header: React.FC = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           )}
-          {/* Login button removed as requested */}
+          {/* Login button has been removed as requested */}
         </div>
       </div>
     </header>

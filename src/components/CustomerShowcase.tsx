@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { motion } from 'framer-motion';
+import { CustomerCar } from '@/types';
 import { 
   Carousel,
   CarouselContent,
@@ -9,13 +10,6 @@ import {
   CarouselNext,
   CarouselPrevious
 } from '@/components/ui/carousel';
-
-interface CustomerCar {
-  id: string;
-  image: string;
-  carName: string;
-  customerName: string;
-}
 
 export const CustomerShowcase: React.FC = () => {
   const [customerCars, setCustomerCars] = useState<CustomerCar[]>([

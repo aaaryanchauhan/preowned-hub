@@ -84,6 +84,30 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_showcases: {
+        Row: {
+          carname: string
+          created_at: string
+          customername: string
+          id: string
+          image: string
+        }
+        Insert: {
+          carname: string
+          created_at?: string
+          customername: string
+          id?: string
+          image: string
+        }
+        Update: {
+          carname?: string
+          created_at?: string
+          customername?: string
+          id?: string
+          image?: string
+        }
+        Relationships: []
+      }
       enquiries: {
         Row: {
           created_at: string

@@ -1,4 +1,3 @@
-
 export interface Car {
   id: string;
   make: string;
@@ -49,4 +48,12 @@ export interface Enquiry {
   created_at: string;
   updated_at: string;
   status: string;
+}
+
+export interface CustomerCar {
+  id: string;
+  image: string;
+  carName: string;
+  customerName: string;
+  created_at?: string;
 }

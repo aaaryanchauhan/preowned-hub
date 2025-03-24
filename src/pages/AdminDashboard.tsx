@@ -1,5 +1,4 @@
-
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useCarContext } from '@/context/CarContext';
 import AdminSidebar from '@/components/AdminSidebar';
 import DashboardCard from '@/components/DashboardCard';
@@ -11,7 +10,6 @@ import AuthRequired from '@/components/AuthRequired';
 import { motion } from 'framer-motion';
 import EnquiryManager from '@/components/EnquiryManager';
 import CustomerShowcaseManager from '@/components/CustomerShowcaseManager';
-import { supabase } from '@/integrations/supabase/client';
 
 const AdminDashboard: React.FC = () => {
   const { stats, cars } = useCarContext();
@@ -26,27 +24,6 @@ const AdminDashboard: React.FC = () => {
     acc[make]++;
     return acc;
   }, {} as Record<string, number>);
-  
-  // Ensure the customer_showcases table exists
-  useEffect(() => {
-    const checkAndCreateShowcaseTable = async () => {
-      try {
-        // Check if the table exists
-        const { error } = await supabase
-          .from('customer_showcases')
-          .select('id')
-          .limit(1);
-          
-        if (error && error.code === '42P01') { // Table doesn't exist error code
-          console.log('Customer showcase table does not exist. It will be created when adding the first entry.');
-        }
-      } catch (error) {
-        console.error('Error checking customer showcases table:', error);
-      }
-    };
-    
-    checkAndCreateShowcaseTable();
-  }, []);
 
   return (
     <AuthRequired>

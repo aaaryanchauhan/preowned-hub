@@ -5,13 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { PlusCircle, Trash2, ImageIcon } from 'lucide-react';
-
-interface CustomerCar {
-  id: string;
-  image: string;
-  carName: string;
-  customerName: string;
-}
+import { CustomerCar } from '@/types';
 
 const CustomerShowcaseManager: React.FC = () => {
   const [customerCars, setCustomerCars] = useState<CustomerCar[]>([]);
