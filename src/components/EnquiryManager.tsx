@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { formatDate } from '@/lib/utils';
@@ -180,7 +181,18 @@ const EnquiryManager: React.FC = () => {
         </div>
       </div>
       
-      {enquiries.length === 0 ? (
+      {isLoading ? (
+        <div className="flex justify-center items-center h-48">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </div>
+      ) : error ? (
+        <div className="text-center py-8">
+          <MessageSquare className="mx-auto h-12 w-12 text-red-400 mb-3" />
+          <h3 className="text-lg font-medium mb-1">Error Loading Enquiries</h3>
+          <p className="text-gray-500 mb-4">{error}</p>
+          <Button onClick={handleRefresh} variant="outline">Try Again</Button>
+        </div>
+      ) : enquiries.length === 0 ? (
         <div className="text-center py-8">
           <MessageSquare className="mx-auto h-12 w-12 text-gray-400 mb-3" />
           <h3 className="text-lg font-medium mb-1">No enquiries found</h3>
