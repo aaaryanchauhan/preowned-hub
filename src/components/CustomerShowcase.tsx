@@ -63,7 +63,15 @@ export const CustomerShowcase: React.FC = () => {
       }
 
       if (data && data.length > 0) {
-        setCustomerCars(data as CustomerCar[]);
+        // Map database fields to our interface properties
+        const mappedData = data.map(item => ({
+          id: item.id,
+          image: item.image,
+          carName: item.carname,
+          customerName: item.customername,
+          created_at: item.created_at
+        }));
+        setCustomerCars(mappedData);
       }
     } catch (error) {
       console.error('Error fetching customer cars:', error);

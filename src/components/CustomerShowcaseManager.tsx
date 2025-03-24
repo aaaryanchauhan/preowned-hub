@@ -34,7 +34,17 @@ const CustomerShowcaseManager: React.FC = () => {
         throw error;
       }
 
-      setCustomerCars(data as CustomerCar[] || []);
+      if (data) {
+        // Map database fields to our interface properties
+        const mappedData = data.map(item => ({
+          id: item.id,
+          image: item.image,
+          carName: item.carname,
+          customerName: item.customername,
+          created_at: item.created_at
+        }));
+        setCustomerCars(mappedData);
+      }
     } catch (error) {
       console.error('Error fetching customer cars:', error);
       toast.error('Failed to load customer showcase data');
@@ -87,12 +97,12 @@ const CustomerShowcaseManager: React.FC = () => {
         imageUrl = data.publicUrl;
       }
 
-      // Add to database
+      // Add to database - map our interface properties to database column names
       const { error: insertError } = await supabase
         .from('customer_showcases')
         .insert([{
-          carName: newCar.carName,
-          customerName: newCar.customerName,
+          carname: newCar.carName,
+          customername: newCar.customerName,
           image: imageUrl,
         }]);
 
