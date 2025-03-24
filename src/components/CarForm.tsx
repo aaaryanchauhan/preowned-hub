@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Car, CarFormData } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -39,6 +38,7 @@ const CarForm: React.FC<CarFormProps> = ({
     description: '',
     features: [],
     images: [],
+    registrationState: 'Not Specified',
   });
   
   const [tab, setTab] = useState('basic');
@@ -66,6 +66,86 @@ const CarForm: React.FC<CarFormProps> = ({
     'Premium Sound System',
     'Ambient Lighting',
     'Alloy Wheels',
+  ];
+
+  // Car brands list
+  const carBrands = [
+    'Maruti Suzuki',
+    'Mahindra',
+    'Tata',
+    'Hyundai',
+    'Toyota',
+    'Kia',
+    'Mercedes-Benz',
+    'BMW',
+    'Skoda',
+    'Land Rover',
+    'Honda',
+    'MG',
+    'Renault',
+    'Volkswagen',
+    'Jeep',
+    'Audi',
+    'Lamborghini',
+    'Citroen',
+    'BYD',
+    'Nissan',
+    'Porsche',
+    'Volvo',
+    'Lexus',
+    'Jaguar',
+    'Rolls-Royce',
+    'MINI',
+    'Ferrari',
+    'Maserati',
+    'Force Motors',
+    'Aston Martin',
+    'Isuzu',
+    'McLaren',
+    'Bentley',
+    'Ford',
+    'Chevrolet',
+  ];
+
+  // Indian states list
+  const indianStates = [
+    'Not Specified',
+    'Andhra Pradesh',
+    'Arunachal Pradesh',
+    'Assam',
+    'Bihar',
+    'Chhattisgarh',
+    'Goa',
+    'Gujarat',
+    'Haryana',
+    'Himachal Pradesh',
+    'Jharkhand',
+    'Karnataka',
+    'Kerala',
+    'Madhya Pradesh',
+    'Maharashtra',
+    'Manipur',
+    'Meghalaya',
+    'Mizoram',
+    'Nagaland',
+    'Odisha',
+    'Punjab',
+    'Rajasthan',
+    'Sikkim',
+    'Tamil Nadu',
+    'Telangana',
+    'Tripura',
+    'Uttar Pradesh',
+    'Uttarakhand',
+    'West Bengal',
+    'Andaman and Nicobar Islands',
+    'Chandigarh',
+    'Dadra and Nagar Haveli and Daman and Diu',
+    'Delhi',
+    'Jammu and Kashmir',
+    'Ladakh',
+    'Lakshadweep',
+    'Puducherry',
   ];
   
   useEffect(() => {
@@ -183,14 +263,9 @@ const CarForm: React.FC<CarFormProps> = ({
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
             >
               <option value="">Select Make</option>
-              <option value="BMW">BMW</option>
-              <option value="Mercedes-Benz">Mercedes-Benz</option>
-              <option value="Audi">Audi</option>
-              <option value="Lexus">Lexus</option>
-              <option value="Toyota">Toyota</option>
-              <option value="Honda">Honda</option>
-              <option value="Ford">Ford</option>
-              <option value="Chevrolet">Chevrolet</option>
+              {carBrands.map((brand) => (
+                <option key={brand} value={brand}>{brand}</option>
+              ))}
             </select>
           </div>
           
@@ -273,6 +348,23 @@ const CarForm: React.FC<CarFormProps> = ({
               <option value="Automatic">Automatic</option>
               <option value="CVT">CVT</option>
               <option value="DCT">DCT</option>
+            </select>
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="registrationState" className="block text-sm font-medium text-gray-700 mb-1">
+              Registration State
+            </label>
+            <select
+              id="registrationState"
+              name="registrationState"
+              value={formData.registrationState}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50"
+            >
+              {indianStates.map((state) => (
+                <option key={state} value={state}>{state}</option>
+              ))}
             </select>
           </div>
         </div>

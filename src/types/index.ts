@@ -1,3 +1,4 @@
+
 export interface Car {
   id: string;
   make: string;
@@ -19,6 +20,7 @@ export interface Car {
   features: string[];
   images: string[];
   status: 'active' | 'sold' | 'featured';
+  registrationState: string;
 }
 
 export interface CarFormData extends Omit<Car, 'id' | 'status'> {

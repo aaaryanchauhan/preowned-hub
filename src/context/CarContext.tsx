@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Car, CarFormData, DashboardStats } from '@/types';
 import { toast } from 'sonner';
@@ -41,7 +40,6 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     featuredCars: 0,
   });
 
-  // Transform Supabase data to our Car type
   const transformSupabaseCars = (supabaseCars: any[]): Car[] => {
     return supabaseCars.map(car => ({
       id: car.id,
@@ -61,13 +59,13 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       topSpeed: car.top_speed,
       warranty: car.warranty,
       description: car.description,
-      features: car.features || [],  // Ensure features is always an array
-      images: car.images || [],      // Ensure images is always an array
+      features: car.features || [],
+      images: car.images || [],
       status: car.status || 'active',
+      registrationState: car.registration_state || 'Not Specified',
     }));
   };
 
-  // Transform our Car type to Supabase format
   const transformCarToSupabase = (car: Car | CarFormData) => {
     return {
       make: car.make,
@@ -89,10 +87,10 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       features: car.features || [],
       images: car.images || [],
       status: (car as Car).status || 'active',
+      registration_state: car.registrationState || 'Not Specified',
     };
   };
 
-  // Fetch cars from Supabase
   const fetchCars = async () => {
     try {
       setIsLoading(true);
@@ -127,7 +125,6 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     fetchCars();
     
-    // Set up a subscription to listen for changes
     const subscription = supabase
       .channel('public:cars')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'cars' }, payload => {
@@ -142,7 +139,6 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   useEffect(() => {
-    // Update stats whenever cars change
     if (cars.length > 0) {
       setStats({
         totalCars: cars.length,
@@ -157,17 +153,14 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       setIsLoading(true);
       
-      // Make sure required fields are present
       if (!carData.make || !carData.model || !carData.year) {
         throw new Error('Make, model, and year are required');
       }
       
-      // Ensure status is set
       if (!carData.status) {
         carData = { ...carData, status: 'active' };
       }
       
-      // Ensure arrays are properly set
       carData.features = carData.features || [];
       carData.images = carData.images || [];
       
@@ -175,7 +168,6 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       
       console.log('Adding car to Supabase with data:', JSON.stringify(supabaseData, null, 2));
       
-      // First try with select() to see detailed response
       const { data, error } = await supabase
         .from('cars')
         .insert(supabaseData)
@@ -190,17 +182,13 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         console.log('Car added successfully, response data:', data);
         const newCars = transformSupabaseCars(data);
         
-        // Update local state with new cars
         setCars(prevCars => [...newCars, ...prevCars]);
         
-        // Show success notification
         toast.success('Car added successfully');
         
-        // Refetch all cars to ensure state is in sync
         await fetchCars();
       } else {
         console.warn('Car was added but no data returned from Supabase');
-        // Refetch cars anyway to ensure we have latest data
         await fetchCars();
       }
     } catch (error: any) {
@@ -217,7 +205,6 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       setIsLoading(true);
       
-      // Convert to Supabase format (only for the updated fields)
       const updateData: any = {};
       
       if (carData.make) updateData.make = carData.make;
@@ -239,6 +226,7 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       if (carData.features) updateData.features = carData.features;
       if (carData.images) updateData.images = carData.images;
       if (carData.status) updateData.status = carData.status;
+      if (carData.registrationState) updateData.registration_state = carData.registrationState;
 
       const { error } = await supabase
         .from('cars')
@@ -249,7 +237,6 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         throw error;
       }
 
-      // Update local state after successful update
       setCars(prevCars => 
         prevCars.map(car => 
           car.id === id ? { ...car, ...carData } : car
@@ -279,7 +266,6 @@ export const CarProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         throw error;
       }
 
-      // Update local state after successful deletion
       setCars(prevCars => prevCars.filter(car => car.id !== id));
       toast.success('Car removed successfully');
     } catch (error: any) {

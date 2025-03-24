@@ -27,6 +27,7 @@ export type Database = {
           power: string
           previous_owners: number
           price: number
+          registration_state: string
           status: string
           top_speed: string
           transmission: string
@@ -51,6 +52,7 @@ export type Database = {
           power: string
           previous_owners?: number
           price: number
+          registration_state?: string
           status: string
           top_speed: string
           transmission: string
@@ -75,6 +77,7 @@ export type Database = {
           power?: string
           previous_owners?: number
           price?: number
+          registration_state?: string
           status?: string
           top_speed?: string
           transmission?: string

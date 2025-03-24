@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { ContactFormData } from '@/types';
 import { Phone, MessageSquare } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface ContactFormProps {
   defaultMessage?: string;
@@ -19,14 +20,26 @@ const ContactForm: React.FC<ContactFormProps> = ({ defaultMessage = '' }) => {
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaVerified, setCaptchaVerified] = useState(false);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
   
+  const handleCaptchaChange = (token: string | null) => {
+    setCaptchaVerified(!!token);
+  };
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!captchaVerified) {
+      toast.error('Please verify that you are not a robot');
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
@@ -59,6 +72,12 @@ const ContactForm: React.FC<ContactFormProps> = ({ defaultMessage = '' }) => {
         phone: '',
         message: '',
       });
+      
+      // Reset the reCAPTCHA
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+      }
+      setCaptchaVerified(false);
     } catch (error: any) {
       console.error('Error submitting form:', error);
       toast.error(error.message || 'Failed to send message. Please try again.');
@@ -133,10 +152,18 @@ const ContactForm: React.FC<ContactFormProps> = ({ defaultMessage = '' }) => {
         />
       </div>
       
+      <div className="flex justify-center mb-2">
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // This is Google's test key - replace with your actual site key in production
+          onChange={handleCaptchaChange}
+        />
+      </div>
+      
       <Button 
         type="submit" 
         className="w-full"
-        disabled={isSubmitting}
+        disabled={isSubmitting || !captchaVerified}
       >
         {isSubmitting ? 'Sending Message...' : 'Send Message'}
       </Button>
