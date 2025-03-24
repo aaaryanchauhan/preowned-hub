@@ -3,48 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { motion } from 'framer-motion';
 import { CustomerCar } from '@/types';
-import { 
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
-} from '@/components/ui/carousel';
 
 export const CustomerShowcase: React.FC = () => {
-  const [customerCars, setCustomerCars] = useState<CustomerCar[]>([
-    // Initial placeholder data
-    {
-      id: '1',
-      image: 'https://images.unsplash.com/photo-1567808291548-fc3ee04dbcf0?q=80&w=1000',
-      carName: 'Mercedes C-Class',
-      customerName: 'John Smith'
-    },
-    {
-      id: '2',
-      image: 'https://images.unsplash.com/photo-1617814076668-8dfc6be2d65c?q=80&w=1000',
-      carName: 'BMW 5 Series',
-      customerName: 'Emma Johnson'
-    },
-    {
-      id: '3',
-      image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1000',
-      carName: 'Audi A4',
-      customerName: 'Michael Brown'
-    },
-    {
-      id: '4',
-      image: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=1000',
-      carName: 'Toyota Camry',
-      customerName: 'Sarah Wilson'
-    },
-    {
-      id: '5',
-      image: 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?q=80&w=1000',
-      carName: 'Honda Accord',
-      customerName: 'David Miller'
-    },
-  ]);
+  const [customerCars, setCustomerCars] = useState<CustomerCar[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchCustomerCars();
@@ -75,8 +37,26 @@ export const CustomerShowcase: React.FC = () => {
       }
     } catch (error) {
       console.error('Error fetching customer cars:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-48">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (customerCars.length === 0) {
+    return (
+      <div className="text-center py-10">
+        <p className="text-gray-500">No customer showcases available yet.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -103,41 +83,6 @@ export const CustomerShowcase: React.FC = () => {
             </div>
           </motion.div>
         ))}
-      </div>
-
-      {/* Mobile carousel for smaller screens */}
-      <div className="block md:hidden mt-6">
-        <Carousel
-          className="w-full"
-          opts={{
-            align: "center",
-            loop: true,
-          }}
-        >
-          <CarouselContent>
-            {customerCars.map((item) => (
-              <CarouselItem key={item.id} className="basis-3/4">
-                <div className="relative overflow-hidden rounded-lg">
-                  <div className="aspect-square bg-gray-100">
-                    <img 
-                      src={item.image} 
-                      alt={item.carName} 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent flex flex-col justify-end p-4 text-white">
-                    <h3 className="font-semibold text-base mb-1">{item.carName}</h3>
-                    <p className="text-sm text-white/90">Owned by {item.customerName}</p>
-                  </div>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="flex justify-center mt-4 gap-2">
-            <CarouselPrevious className="relative static left-0 right-0 translate-y-0 bg-white/20 hover:bg-white/30 border-white/30 h-8 w-8" />
-            <CarouselNext className="relative static left-0 right-0 translate-y-0 bg-white/20 hover:bg-white/30 border-white/30 h-8 w-8" />
-          </div>
-        </Carousel>
       </div>
     </div>
   );

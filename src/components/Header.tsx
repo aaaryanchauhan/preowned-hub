@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
-import { Car, ChevronDown, LogOut, User } from 'lucide-react';
+import { Car, ChevronDown, LogOut, User, PhoneCall } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,6 +50,11 @@ const Header: React.FC = () => {
         </nav>
         
         <div className="flex items-center space-x-4">
+          <Button variant="outline" size="sm" className="hidden md:flex items-center gap-2">
+            <PhoneCall className="w-4 h-4" />
+            <span>Call Now: +91 9999999999</span>
+          </Button>
+          
           {isAuthenticated && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

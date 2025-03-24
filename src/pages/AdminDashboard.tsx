@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useCarContext } from '@/context/CarContext';
 import AdminSidebar from '@/components/AdminSidebar';
@@ -9,7 +10,6 @@ import { Link } from 'react-router-dom';
 import AuthRequired from '@/components/AuthRequired';
 import { motion } from 'framer-motion';
 import EnquiryManager from '@/components/EnquiryManager';
-import CustomerShowcaseManager from '@/components/CustomerShowcaseManager';
 
 const AdminDashboard: React.FC = () => {
   const { stats, cars } = useCarContext();
@@ -82,11 +82,6 @@ const AdminDashboard: React.FC = () => {
                 </motion.div>
               ))}
             </div>
-          </div>
-          
-          {/* Customer Showcases Management Section */}
-          <div className="mb-8">
-            <CustomerShowcaseManager />
           </div>
           
           {/* Customer Enquiries Section */}

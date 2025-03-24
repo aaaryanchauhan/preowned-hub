@@ -11,6 +11,7 @@ import {
   Settings,
   Star,
   Tag,
+  Image,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -25,6 +26,7 @@ const AdminSidebar: React.FC = () => {
     { icon: Tag, label: 'Active Listings', path: '/admin/active' },
     { icon: CircleDollarSign, label: 'Sold Cars', path: '/admin/sold' },
     { icon: Star, label: 'Featured Cars', path: '/admin/featured' },
+    { icon: Image, label: 'Customer Showcase', path: '/admin/showcase' },
     { icon: Settings, label: 'Settings', path: '/admin/settings' },
   ];
   

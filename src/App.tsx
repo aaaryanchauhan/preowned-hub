@@ -15,6 +15,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminInventory from "./pages/AdminInventory";
 import AddEditCar from "./pages/AddEditCar";
 import NotFound from "./pages/NotFound";
+import AboutUs from "./pages/AboutUs";
+import CustomerShowcaseManagement from "./pages/CustomerShowcaseManagement";
 
 // Install framer-motion for animations
 import { motion, AnimatePresence } from "framer-motion";
@@ -35,12 +37,14 @@ const App = () => (
                 <Route path="/cars" element={<AllCars />} />
                 <Route path="/cars/:id" element={<CarDetails />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/about" element={<AboutUs />} />
                 <Route path="/login" element={<Login />} />
                 
                 <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/admin/inventory" element={<AdminInventory />} />
                 <Route path="/admin/inventory/add" element={<AddEditCar />} />
                 <Route path="/admin/inventory/edit/:id" element={<AddEditCar />} />
+                <Route path="/admin/showcase" element={<CustomerShowcaseManagement />} />
                 
                 {/* Status-based routes */}
                 <Route path="/admin/active" element={<AdminInventory />} />
