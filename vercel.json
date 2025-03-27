@@ -12,4 +12,4 @@
   "installCommand": "npm install",
   "devCommand": "npm run dev",
   "regions": ["bom1"]
-} 
+}
