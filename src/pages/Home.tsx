@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCarContext } from '@/context/CarContext';
@@ -82,7 +81,7 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
               >
                 <img
-                  src="/lovable-uploads/07352a67-f0a8-4e3a-9e55-6d6165c84f5d.png"
+                  src="/lovable-uploads/2844fc78-e21d-484f-94b5-f554d84b36f9.png"
                   alt="BMW M340i luxury sedan"
                   className="rounded-lg shadow-lg w-full h-auto max-h-96 object-cover"
                 />
